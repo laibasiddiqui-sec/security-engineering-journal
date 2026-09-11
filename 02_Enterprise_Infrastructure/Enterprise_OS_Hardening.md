@@ -13,6 +13,7 @@
 
 
 
+
 # Enterprise Compute Typologies & Cloud Infrastructure Attack Surfaces
 
 ## Category: Architectural Risk Assessment & Virtualization Forensics
@@ -39,3 +40,112 @@
 *   **Architectural Baseline:** High-throughput enterprise workloads rely on centralized transactional processing systems (e.g., IBM z/OS) operating outside traditional modern web frameworks.
 *   **Esoteric Protocols:** Security evaluations require specialized translation engines and terminal emulators to interact with non-standard networking protocols (e.g., TN3270, SNA).
 *   **Access Control Auditing:** Assessments target systemic configuration errors within Resource Access Control Facilities (RACF), focusing on weak legacy cryptographic hashing rules or misconfigured group permission guidelines to mitigate unauthorized ledger access.
+
+
+
+
+
+# Web Communication Protocols & HTTP Subsystem Attack Surfaces
+
+## Category: Network Topography Auditing & Web Application Threat Modeling
+**Objective:** Deconstructing the architectural mechanics of client-server transaction models, link-local networking structures, and the nine core HTTP method verbs to identify exposure vectors, authorization flaws, and perimeter bypasses.
+
+---
+
+### 1. Architectural Topology & Core Infrastructure Components
+
+*   **The Client Context:** A compute instance, local software agent, or application runtime environment that initializes outbound TCP/IP socket requests to execute data queries.
+*   **The Server Host:** A high-availability remote infrastructure node persistently running background daemon processes tasked with parsing inbound request strings and serving structured data payloads.
+*   **The Web Browser Runtime:** A local client-side software environment engineered to programmatically compile HTTP requests, parse transit HTML/CSS/JavaScript payloads, and render graphical user interfaces.
+*   **The Network Subsystem:** The underlying fabric of interconnected hardware routing matrices, switching nodes, public/private routing tables, and physical transmission media facilitating data packet transport.
+*   **Domain Name System (DNS):** The decentralized directory infrastructure engineered to resolve fully qualified domain names (FQDNs) into routable network Layer 3 IP destinations for client ingestion.
+*   **Standardized Protocols:** Cryptographically governed syntax and transmission laws establishing strict formatting rules for all network data packet exchanges.
+*   **Logical Network Ports:** 16-bit structural software endpoints (ranging from port `0` to `65535`) mapped directly within an operating system kernel to route active traffic streams to specific service daemons.
+
+---
+
+### 2. Transaction Engineering: Raw Traffic Matrix Analysis
+
+A standardized, unencrypted transaction loop across Port 80 (HTTP) or an encrypted stream over Port 443 (HTTPS) relies on raw text packet exchanges divided into explicit headers and payload boundaries.
+
+#### A. Inbound Client Request Frame
+When an application queries an infrastructure endpoint, it compiles an asymmetric plain-text structure:
+
+```http
+GET /index.html HTTP/1.1
+Host: target-enterprise.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0)
+Accept: text/html
+Connection: keep-alive
+```
+*   **Request Definition String (`GET /index.html`):** The operational verb instructing the server daemon to fetch and read an isolated file asset relative to the root directory path.
+*   **Host Pointer Field (`Host:`):** Specifies the explicit target enterprise domain name space to route requests across virtual hosting configurations.
+*   **Environment Descriptor (`User-Agent:`):** Informs the remote host of the specific operating system and browser runtime engine initiating the request.
+
+#### B. Outbound Server Response Frame
+Upon ingestion, validation, and permission processing, the host returns a response status token paired with metadata criteria:
+
+```http
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 452
+Server: Apache/2.4.41 (Ubuntu)
+
+<!DOCTYPE html>
+<html>
+  <body><h1>Access Granted: Secure Shell Tunnel Established</h1></body>
+</html>
+```
+*   **Status Validation Code (`200 OK`):** The protocol execution parameter confirming that the targeted resource was successfully located and processed.
+*   **Payload Specification (`Content-Type:`):** Instructs the client interpreter on how to process and render the underlying transmission (e.g., parsing raw code as an interactive web page layout).
+
+---
+
+### 3. The Nine Core HTTP Verbs: Threat Modeling & Vulnerability Analysis
+
+```text
++------------------------------------------------------------------------------------+
+
+|                        THE HTTP VERB RISK & AUDIT MATRIX                           |
++------------------------------------------------------------------------------------+
+
+|  📝 DATA RETRIEVAL   ===> GET (Read content) | HEAD (Read only structural logs)   |
+|  ⚙️ ASSET INJECTION  ===> POST (Create new)  | PUT (Replace) | PATCH (Modify)     |
+|  🛡️ RECON & CONTROL  ===> DELETE (Erase)     | OPTIONS (Query permitted doors)    |
+|                           CONNECT (Tunnel)   | TRACE (Debug echo feedback path)   |
++------------------------------------------------------------------------------------+
+```
+
+#### 1. `GET` (Resource Retrieval)
+*   **Mechanic:** Requests data from a specified resource path without modification of server state.
+*   **Security Context:** Safe and idempotent. Adversaries audit `GET` requests to analyze input fields and URL strings for parameters manipulation, injection vectors, and authorization flaws.
+
+#### 2. `POST` (Data Ingestion)
+*   **Mechanic:** Submits structured data blocks to a processing engine on the remote host, altering the internal database state.
+*   **Security Context:** Non-idempotent. Penetration testers intercept `POST` request headers to test authentication mechanisms, assess payload validation, and target business-logic loopholes.
+
+#### 3. `PUT` (Asset Replacement)
+*   **Mechanic:** Uploads an independent data payload to completely overwrite the target resource existing at that precise URL directory path.
+*   **Security Context:** **High Risk Configuration.** Leaving the `PUT` verb unauthenticated allows an attacker to upload an arbitrary malicious web shell script directly onto the file system, leading to remote code execution (RCE).
+
+#### 4. `DELETE` (Asset Removal)
+*   **Mechanic:** Instructs the target server to permanently purge the selected file asset at the indicated URL path.
+*   **Security Context:** **High Risk Configuration.** Must be severely locked down via access control lists (ACLs) to prevent unauthorized destructive modification of database files or site structures.
+
+#### 5. `PATCH` (Asset Modification)
+*   **Mechanic:** Delivers partial, delta modifications to an existing target asset rather than replacing the entire component.
+
+#### 6. `HEAD` (Header Enumeration)
+*   **Mechanic:** Mirrored tracking behavior of a `GET` request, but commands the server to truncate the response and return *only* the operational header lines, omitting the message body.
+*   **Security Context:** Frequently leveraged during stealth infrastructure reconnaissance to perform ultra-fast, low-bandwidth fingerprinting of target server software versions and configurations.
+
+#### 7. `OPTIONS` (Perimeter Access Discovery)
+*   **Mechanic:** Interrogates the target server to return an explicit listing of all HTTP methods and commands actively permitted across that target URL node.
+*   **Security Context:** Core active footprinting vector. If an `OPTIONS` probe exposes active, unauthenticated `PUT` or `DELETE` methods (`Allow: GET, POST, PUT, DELETE`), the target is flagged for direct exploitation workflows.
+
+#### 8. `CONNECT` (Cryptographic Proxy Tunneling)
+*   **Mechanic:** Commands the proxy server to initialize an arbitrary, transparent two-way TCP tunnel connection to a downstream remote destination.
+
+#### 9. `TRACE` (Diagnostic Loop Verification)
+*   **Mechanic:** Instructs the remote server to echo the exact received request back to the client for transport logging and diagnostics mapping.
+*   **Security Context:** **Vulnerability Hazard.** Attackers exploit this behavior via Cross-Site Tracing (XST) vectors to pull session tokens and secure cryptographic cookie variables straight out of the mirrored network headers.
